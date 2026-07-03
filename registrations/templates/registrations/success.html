@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Registration Receipt</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .receipt {
+            width: 700px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .total {
+            font-size: 22px;
+            font-weight: bold;
+            color: green;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="receipt">
+
+    <!-- HEADER -->
+    <div class="center">
+        <img src="http://127.0.0.1:8000/static/images/church_logo.jpg" width="120">
+
+        <h1>Kingdom City Church Harare</h1>
+        <h2>Conference Registration Receipt</h2>
+    </div>
+
+    <hr>
+
+    <table>
+
+        <tr>
+            <td><strong>Registration Number</strong></td>
+            <td>{{ registration.registration_number }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Conference</strong></td>
+            <td>{{ registration.event.name }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Date</strong></td>
+            <td>{{ registration.created_at|date:"d F Y" }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Time</strong></td>
+            <td>{{ registration.created_at|date:"H:i" }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Name</strong></td>
+            <td>{{ registration.first_name }} {{ registration.last_name }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Gender</strong></td>
+            <td>{{ registration.get_gender_display }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Registration Type</strong></td>
+            <td>{{ registration.get_registration_type_display }}</td>
+        </tr>
+
+        {% if registration.registration_type == "individual" %}
+        <tr>
+            <td><strong>Category</strong></td>
+            <td>{{ registration.get_category_display }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td>Adults</td>
+            <td>{{ registration.adults }}</td>
+        </tr>
+        <tr>
+            <td>Youths</td>
+            <td>{{ registration.youths }}</td>
+        </tr>
+        <tr>
+            <td>Young Generation</td>
+            <td>{{ registration.young_generation }}</td>
+        </tr>
+        {% endif %}
+
+        <tr>
+            <td><strong>Registration Fee</strong></td>
+            <td>${{ registration.registration_fee }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Pledge</strong></td>
+            <td>${{ registration.pledge }}</td>
+        </tr>
+
+        <tr class="total">
+            <td><strong>Grand Total</strong></td>
+            <td><strong>${{ registration.grand_total }}</strong></td>
+        </tr>
+
+    </table>
+
+    <hr>
+
+    <div class="center">
+        <h3>For More Information</h3>
+        <p><strong>Ps Tau</strong></p>
+        <p>📞 0772931684</p>
+    </div>
+
+    <hr>
+
+{% if qr_code %}
+<div class="center">
+    <h3>Scan to Verify Registration</h3>
+
+    <img src="data:image/png;base64,{{ qr_code }}" width="150">
+
+    <p><small>Kingdom City Church Verification System</small></p>
+</div>
+{% endif %}
+
+    <hr>
+
+    <p class="center">
+        Thank you for registering. We look forward to worshipping with you.
+    </p>
+
+    <div class="center no-print">
+
+        <button onclick="window.print()">
+            🖨 Print Receipt
+        </button>
+
+        <br><br>
+
+        <a href="{% url 'receipt_pdf' registration.id %}">
+            <button>
+                📄 Download PDF Receipt
+            </button>
+        </a>
+
+        <br><br>
+
+        <a href="/">
+            <button>
+                Return Home
+            </button>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

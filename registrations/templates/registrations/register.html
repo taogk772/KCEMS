@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Register</title>
+</head>
+
+<body>
+
+<div style="text-align:center; margin-bottom:20px;">
+    <img src="{% static 'images/church_logo.jpg' %}" width="100">
+</div>
+
+<h1>{{ event.name }}</h1>
+
+<h2>Conference Registration</h2>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Submit Registration</button>
+
+</form>
+
+</body>
+
+</html>

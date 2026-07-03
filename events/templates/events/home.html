@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<div style="text-align:center; margin-top:20px;">
+    <img src="{% static 'images/church_logo.jpg' %}" width="120">
+</div>
+
+<head>
+    <title>Kingdom City Event Management System</title>
+</head>
+
+<body>
+
+<h1>Kingdom City Event Management System</h1>
+
+<hr>
+
+<h2>Upcoming Events</h2>
+
+{% for event in events %}
+
+    <h3>{{ event.name }}</h3>
+
+    <p><strong>Theme:</strong> {{ event.theme }}</p>
+
+    <p><strong>Venue:</strong> {{ event.venue }}</p>
+
+    <p><strong>Start Date:</strong> {{ event.start_date }}</p>
+
+    <p><strong>End Date:</strong> {{ event.end_date }}</p>
+
+    <a href="/register/{{ event.id }}/">
+    <button>Register Now</button>
+</a>
+
+
+{% empty %}
+
+    <h3>No events available.</h3>
+
+{% endfor %}
+
+</body>
+
+</html>

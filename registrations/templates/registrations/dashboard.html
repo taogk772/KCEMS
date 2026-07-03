@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <style>
+        body { font-family: Arial; background: #f4f4f4; }
+
+        .container {
+            width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card {
+            background: #eee;
+            padding: 15px;
+            border-radius: 10px;
+            width: 30%;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        table th {
+            background: #333;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Conference Dashboard</h2>
+
+    <div class="stats">
+
+        <div class="card">
+            <h3>Total Registrations</h3>
+            <h2>{{ total_registrations }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Total Revenue</h3>
+            <h2>${{ total_revenue }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Total Pledges</h3>
+            <h2>${{ total_pledges }}</h2>
+        </div>
+
+    </div>
+
+    <h3>Recent Registrations</h3>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Event</th>
+            <th>Phone</th>
+            <th>Fee</th>
+            <th>Date</th>
+        </tr>
+
+        {% for r in registrations %}
+        <tr>
+            <td>{{ r.first_name }} {{ r.last_name }}</td>
+            <td>{{ r.event.name }}</td>
+            <td>{{ r.phone }}</td>
+            <td>${{ r.registration_fee }}</td>
+            <td>{{ r.created_at|date:"d M Y H:i" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</body>
+</html>

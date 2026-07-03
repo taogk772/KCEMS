@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Registration</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+        }
+
+        .box {
+            width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px gray;
+        }
+
+        .valid {
+            color: green;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .info {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .info p {
+            border-bottom: 1px solid #ddd;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2>Kingdom City Church Verification</h2>
+
+    <p class="valid">✔ VALID REGISTRATION</p>
+
+    <div class="info">
+        <p><strong>Reg No:</strong> {{ registration.registration_number }}</p>
+        <p><strong>Name:</strong> {{ registration.first_name }} {{ registration.last_name }}</p>
+        <p><strong>Event:</strong> {{ registration.event.name }}</p>
+        <p><strong>Phone:</strong> {{ registration.phone }}</p>
+        <p><strong>Email:</strong> {{ registration.email }}</p>
+    </div>
+
+</div>
+
+</body>
+</html>
