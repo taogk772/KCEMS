@@ -2,7 +2,7 @@ import qrcode
 import base64
 from io import BytesIO
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
@@ -40,7 +40,12 @@ def dashboard(request):
         "total_pledges": total_pledges,
     })
 
+def registration_success(request, pk):
+    registration = get_object_or_404(Registration, id=pk)
 
+    return render(request, "registrations/success.html", {
+        "registration": registration
+    })
 # =========================
 # REGISTER VIEW (FIXED)
 # =========================
@@ -108,9 +113,7 @@ Senior Pastors (D & F MUNYAKA)
             except Exception as e:
                 print("EMAIL ERROR:", e)
 
-            return render(request, 'registrations/success.html', {
-                'registration': registration
-            })
+            return redirect('registration_success',pk=registration.id)
 
         else:
             print("FORM ERRORS:", form.errors)
