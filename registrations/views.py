@@ -7,7 +7,6 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 
 from xhtml2pdf import pisa
-
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Sum
@@ -40,14 +39,20 @@ def dashboard(request):
         "total_pledges": total_pledges,
     })
 
+
+# =========================
+# SUCCESS PAGE
+# =========================
 def registration_success(request, pk):
     registration = get_object_or_404(Registration, id=pk)
 
     return render(request, "registrations/success.html", {
         "registration": registration
     })
+
+
 # =========================
-# REGISTER VIEW (FIXED)
+# REGISTER VIEW (FIXED FOR RENDER)
 # =========================
 def register(request, event_id):
     event = get_object_or_404(Event, id=event_id)
@@ -62,58 +67,35 @@ def register(request, event_id):
 
             print("REGISTRATION SAVED:", registration)
 
-            # FULL NAME (SAFE)
             full_name = f"{registration.first_name} {registration.last_name}"
 
             # =========================
-            # EMAIL TO ADMIN
+            # EMAIL (DISABLED FOR RENDER STABILITY)
             # =========================
             try:
+                print("EMAIL SKIPPED (Render safe mode)")
+                
+                # Uncomment later when stable:
+                """
                 send_mail(
                     subject="New KCEMS Registration",
-                    message=f"""
-New Registration Received:
-
-Name: {full_name}
-Email: {registration.email}
-Phone: {registration.phone}
-Category: {registration.category}
-Gender: {registration.gender}
-
-Registration No: {registration.registration_number}
-""",
+                    message=f"New registration: {full_name}",
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=["kingdomcitychurch2020@gmail.com"],
-                    fail_silently=False,
                 )
 
-                # =========================
-                # EMAIL TO USER
-                # =========================
                 send_mail(
                     subject="KCEMS Registration Successful",
-                    message=f"""
-Dear {full_name},
-
-Thank you for registering for the Kingdom City Advance Conference 2026.
-
-Your Registration Number:
-{registration.registration_number}
-
-We are excited to host you.
-
-Blessings,
-Senior Pastors (D & F MUNYAKA)
-""",
+                    message=f"Dear {full_name}, your reg no: {registration.registration_number}",
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[registration.email],
-                    fail_silently=False,
                 )
+                """
 
             except Exception as e:
                 print("EMAIL ERROR:", e)
 
-            return redirect('registration_success',pk=registration.id)
+            return redirect('registration_success', pk=registration.id)
 
         else:
             print("FORM ERRORS:", form.errors)
