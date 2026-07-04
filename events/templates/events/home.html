@@ -2,45 +2,148 @@
 <!DOCTYPE html>
 <html>
 
-<div style="text-align:center; margin-top:20px;">
-    <img src="{% static 'images/church_logo.jpg' %}" width="120">
-</div>
-
 <head>
     <title>Kingdom City Event Management System</title>
+
+    <style>
+
+        body{
+            margin:0;
+            padding:0;
+            font-family: Arial, Helvetica, sans-serif;
+            background:#f3f3f3;
+        }
+
+        .container{
+            width:90%;
+            max-width:1100px;
+            margin:40px auto;
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 0 20px rgba(0,0,0,0.15);
+            text-align:center;
+        }
+
+        .logo{
+            width:120px;
+        }
+
+        h1{
+            color:#5b1a75;
+            margin-top:15px;
+            font-size:42px;
+        }
+
+        h2{
+            color:#444;
+            margin-bottom:30px;
+        }
+
+        .flyer{
+            width:100%;
+            max-width:700px;
+            border-radius:15px;
+            box-shadow:0 0 20px rgba(0,0,0,0.25);
+            margin:30px auto;
+        }
+
+        .event-card{
+            background:#fafafa;
+            padding:25px;
+            margin-top:40px;
+            border-radius:12px;
+            border-left:8px solid #5b1a75;
+            text-align:left;
+        }
+
+        .event-card h3{
+            color:#5b1a75;
+            margin-top:0;
+        }
+
+        .register-btn{
+
+            display:inline-block;
+            margin-top:20px;
+            padding:15px 35px;
+
+            background:#6d1b8c;
+            color:white;
+
+            text-decoration:none;
+            font-size:20px;
+            font-weight:bold;
+
+            border-radius:50px;
+
+            transition:.3s;
+        }
+
+        .register-btn:hover{
+
+            background:#8d2fb4;
+            transform:scale(1.05);
+
+        }
+
+        hr{
+            margin:40px 0;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-<h1>Kingdom City Event Management System</h1>
+<div class="container">
 
-<hr>
+    <img src="{% static 'images/church_logo.jpg' %}" class="logo">
 
-<h2>Upcoming Events</h2>
+    <h1>Kingdom City Event Management System</h1>
 
-{% for event in events %}
+    <h2>Advance Conference 2026 Registration Portal</h2>
 
-    <h3>{{ event.name }}</h3>
+    <img src="{% static 'images/advance_conference_flyer.jpg' %}"
+         class="flyer">
 
-    <p><strong>Theme:</strong> {{ event.theme }}</p>
+    <hr>
 
-    <p><strong>Venue:</strong> {{ event.venue }}</p>
+    <h2>Upcoming Conference</h2>
 
-    <p><strong>Start Date:</strong> {{ event.start_date }}</p>
+    {% for event in events %}
 
-    <p><strong>End Date:</strong> {{ event.end_date }}</p>
+    <div class="event-card">
 
-    <a href="/register/{{ event.id }}/">
-    <button>Register Now</button>
-</a>
+        <h3>{{ event.name }}</h3>
 
+        <p><strong>Theme:</strong> {{ event.theme }}</p>
 
-{% empty %}
+        <p><strong>Venue:</strong> {{ event.venue }}</p>
 
-    <h3>No events available.</h3>
+        <p><strong>Start Date:</strong> {{ event.start_date }}</p>
 
-{% endfor %}
+        <p><strong>End Date:</strong> {{ event.end_date }}</p>
+
+        <div style="text-align:center;">
+
+            <a href="/register/{{ event.id }}/"
+               class="register-btn">
+                Register Now
+            </a>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+        <h3>No events available.</h3>
+
+    {% endfor %}
+
+</div>
 
 </body>
-
 </html>

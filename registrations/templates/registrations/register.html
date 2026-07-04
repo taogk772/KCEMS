@@ -1,30 +1,126 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <title>Conference Registration</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial, Helvetica, sans-serif;
+            background:#f5f5f5;
+        }
+
+        .container{
+            width:90%;
+            max-width:700px;
+            margin:40px auto;
+        }
+
+        .card{
+            background:white;
+            padding:40px;
+            border-radius:15px;
+            box-shadow:0 5px 18px rgba(0,0,0,.15);
+        }
+
+        .header{
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        .header img{
+            width:120px;
+            margin-bottom:15px;
+        }
+
+        .header h1{
+            color:#4B0082;
+            margin-bottom:5px;
+        }
+
+        .header h2{
+            color:#666;
+            font-size:22px;
+            margin-top:0;
+        }
+
+        form p{
+            margin-bottom:18px;
+        }
+
+        form label{
+            display:block;
+            font-weight:bold;
+            margin-bottom:6px;
+        }
+
+        form input,
+        form select,
+        form textarea{
+            width:100%;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:16px;
+            box-sizing:border-box;
+        }
+
+        button{
+            width:100%;
+            background:#6A1B9A;
+            color:white;
+            padding:15px;
+            border:none;
+            border-radius:8px;
+            font-size:18px;
+            font-weight:bold;
+            cursor:pointer;
+            margin-top:20px;
+        }
+
+        button:hover{
+            background:#4A148C;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-<div style="text-align:center; margin-bottom:20px;">
-    <img src="{% static 'images/church_logo.jpg' %}" width="100">
+<div class="container">
+
+    <div class="card">
+
+        <div class="header">
+
+            <img src="{% static 'images/church_logo.jpg' %}" alt="Logo">
+
+            <h1>{{ event.name }}</h1>
+
+            <h2>Conference Registration</h2>
+
+        </div>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">
+                Register Now
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
-
-<h1>{{ event.name }}</h1>
-
-<h2>Conference Registration</h2>
-
-<form method="POST">
-
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit">Submit Registration</button>
-
-</form>
 
 </body>
 
