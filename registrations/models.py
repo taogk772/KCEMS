@@ -94,14 +94,14 @@ class Registration(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     # =====================
-    # FULL NAME (BONUS)
+    # FULL NAME
     # =====================
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
     # =====================
-    # PRICING LOGIC
+    # REGISTRATION FEE
     # =====================
     def calculate_registration_fee(self):
 
@@ -110,16 +110,22 @@ class Registration(models.Model):
         SUNDAY_PRICE = 5
 
         if self.registration_type == "individual":
+
             if self.category == "adult":
                 return ADULT_PRICE
+
             elif self.category == "young":
                 return YOUNG_PRICE
+
             elif self.category == "sunday":
                 return SUNDAY_PRICE
 
+            return 0
+
+        # Family Registration
         return (
             (self.adults or 0) * ADULT_PRICE +
-            (self.young or 0) * YOUNG_PRICE +
+            (self.young_generation or 0) * YOUNG_PRICE +
             (self.sunday_school or 0) * SUNDAY_PRICE
         )
 
@@ -131,25 +137,26 @@ class Registration(models.Model):
         return (self.registration_fee or 0) + (self.pledge or 0)
 
     # =====================
-    # SAVE OVERRIDE
+    # SAVE
     # =====================
     def save(self, *args, **kwargs):
 
-        # Generate registration number
+        # Generate Registration Number
         if not self.registration_number:
+
             last = Registration.objects.order_by('-id').first()
 
             if last and last.registration_number:
                 try:
                     last_number = int(last.registration_number.split('-')[-1])
-                except:
+                except ValueError:
                     last_number = 0
             else:
                 last_number = 0
 
             self.registration_number = f"AC2026-{last_number + 1:04d}"
 
-        # Calculate fee
+        # Calculate registration fee
         self.registration_fee = self.calculate_registration_fee()
 
         super().save(*args, **kwargs)
