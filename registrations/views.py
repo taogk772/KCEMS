@@ -71,14 +71,74 @@ def register(request, event_id):
 
             send_mail(
     subject="New KCEMS Registration",
-    message=f"New registration: {full_name}",
+    message=f"""
+A new registration has been submitted.
+
+---------------------------------------
+REGISTRATION DETAILS
+---------------------------------------
+
+Name: {full_name}
+Registration No: {registration.registration_number}
+
+Email: {registration.email}
+Phone: {registration.phone}
+
+Gender: {registration.gender}
+Category: {registration.category}
+
+Conference:
+{registration.event.name}
+
+Date Registered:
+{registration.created_at.strftime('%d %B %Y %I:%M %p')}
+
+---------------------------------------
+Kingdom City Event Management System
+""",
     from_email=settings.DEFAULT_FROM_EMAIL,
     recipient_list=["kingdomcitychurch2020@gmail.com"],
 )
 
             send_mail(
     subject="KCEMS Registration Successful",
-    message=f"Dear {full_name}, your reg no: {registration.registration_number}",
+    message=f"""
+Dear {full_name},
+
+Greetings in the wonderful name of our Lord Jesus Christ.
+
+Congratulations! Your registration for the Kingdom City Advance Conference 2026 has been successfully received.
+
+================================================
+
+REGISTRATION NUMBER:
+{registration.registration_number}
+
+Conference:
+{registration.event.name}
+
+Venue:
+{registration.event.venue}
+
+Dates:
+{registration.event.start_date} to {registration.event.end_date}
+
+================================================
+
+Please keep your registration number safe, as it will be required during check-in.
+
+We look forward to welcoming you to an unforgettable time of worship, teaching, fellowship, and spiritual impartation.
+
+May the Lord richly bless you.
+
+Grace and Peace,
+
+Senior Pastors
+D & F Munyaka
+
+Kingdom City Church
+Kingdom City Event Management System (KCEMS)
+""",
     from_email=settings.DEFAULT_FROM_EMAIL,
     recipient_list=[registration.email],
 ) 
