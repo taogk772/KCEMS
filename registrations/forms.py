@@ -19,8 +19,8 @@ class RegistrationForm(forms.ModelForm):
 
             # Family fields
             'adults',
-            'youths',
             'young_generation',
+            'sunday_school',
 
             'pledge',
         ]

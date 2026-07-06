@@ -9,8 +9,8 @@ class Registration(models.Model):
     # =====================
     CATEGORY_CHOICES = [
         ('adult', 'Adult ($20)'),
-        ('youth', 'Youth ($10)'),
-        ('young', 'Young Generation ($5)'),
+        ('young', 'Young Generation ($10)'),
+        ('sunday', 'Sunday School ($5)'),
     ]
 
     REGISTRATION_TYPES = [
@@ -70,8 +70,8 @@ class Registration(models.Model):
     # FAMILY INFO
     # =====================
     adults = models.PositiveIntegerField(default=0)
-    youths = models.PositiveIntegerField(default=0)
     young_generation = models.PositiveIntegerField(default=0)
+    sunday_school = models.PositiveIntegerField(default=0)
 
     # =====================
     # FINANCIALS
@@ -106,21 +106,21 @@ class Registration(models.Model):
     def calculate_registration_fee(self):
 
         ADULT_PRICE = 20
-        YOUTH_PRICE = 10
-        YOUNG_PRICE = 5
+        YOUNG_PRICE = 10
+        SUNDAY_PRICE = 5
 
         if self.registration_type == "individual":
             if self.category == "adult":
                 return ADULT_PRICE
-            elif self.category == "youth":
-                return YOUTH_PRICE
             elif self.category == "young":
                 return YOUNG_PRICE
+            elif self.category == "sunday":
+                return SUNDAY_PRICE
 
         return (
             (self.adults or 0) * ADULT_PRICE +
-            (self.youths or 0) * YOUTH_PRICE +
-            (self.young_generation or 0) * YOUNG_PRICE
+            (self.young or 0) * YOUNG_PRICE +
+            (self.sunday_school or 0) * SUNDAY_PRICE
         )
 
     # =====================
