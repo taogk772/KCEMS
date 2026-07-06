@@ -69,6 +69,21 @@ def register(request, event_id):
 
             full_name = f"{registration.first_name} {registration.last_name}"
 
+            send_mail(
+    subject="New KCEMS Registration",
+    message=f"New registration: {full_name}",
+    from_email=settings.DEFAULT_FROM_EMAIL,
+    recipient_list=["kingdomcitychurch2020@gmail.com"],
+)
+
+            send_mail(
+    subject="KCEMS Registration Successful",
+    message=f"Dear {full_name}, your reg no: {registration.registration_number}",
+    from_email=settings.DEFAULT_FROM_EMAIL,
+    recipient_list=[registration.email],
+) 
+            return redirect('registration_success', pk=registration.id)
+
             # =========================
             # EMAIL (DISABLED FOR RENDER STABILITY)
             # =========================
