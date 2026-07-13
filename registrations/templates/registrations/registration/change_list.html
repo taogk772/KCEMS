@@ -1,0 +1,66 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+
+<style>
+    .family-summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .summary-card {
+        background: white;
+        border-radius: 10px;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+        border-top: 5px solid #6a1b9a;
+    }
+
+    .summary-card h3 {
+        margin: 0 0 10px;
+        color: #555;
+        font-size: 15px;
+    }
+
+    .summary-card strong {
+        font-size: 28px;
+        color: #4b0082;
+    }
+
+    @media (max-width: 800px) {
+        .family-summary {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+
+<div class="family-summary">
+
+    <div class="summary-card">
+        <h3>Family Adults</h3>
+        <strong>{{ family_adults_total }}</strong>
+    </div>
+
+    <div class="summary-card">
+        <h3>Family Young Generation</h3>
+        <strong>{{ family_young_generation_total }}</strong>
+    </div>
+
+    <div class="summary-card">
+        <h3>Family Sunday School</h3>
+        <strong>{{ family_sunday_school_total }}</strong>
+    </div>
+
+    <div class="summary-card">
+        <h3>Total Family Attendees</h3>
+        <strong>{{ family_people_total }}</strong>
+    </div>
+
+</div>
+
+{{ block.super }}
+
+{% endblock %}

@@ -8,23 +8,23 @@ class Registration(models.Model):
     # CHOICES
     # =====================
     CATEGORY_CHOICES = [
-        ('adult', 'Adult ($20)'),
-        ('young', 'Young Generation ($10)'),
-        ('sunday', 'Sunday School ($5)'),
+        ("adult", "Adult ($20)"),
+        ("young_generation", "Young Generation ($10)"),
+        ("sunday_school", "Sunday School ($5)"),
     ]
 
     REGISTRATION_TYPES = [
-        ('individual', 'Individual'),
-        ('family', 'Family'),
+        ("individual", "Individual"),
+        ("family", "Family"),
     ]
 
     GENDER_CHOICES = [
-        ('male', 'Male'),
-        ('female', 'Female'),
+        ("male", "Male"),
+        ("female", "Female"),
     ]
 
     # =====================
-    # BASIC INFO
+    # BASIC INFORMATION
     # =====================
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -32,7 +32,7 @@ class Registration(models.Model):
     gender = models.CharField(
         max_length=10,
         choices=GENDER_CHOICES,
-        default='male'
+        default="male",
     )
 
     email = models.EmailField()
@@ -41,55 +41,57 @@ class Registration(models.Model):
     address = models.CharField(max_length=255)
 
     event = models.ForeignKey(
-        'events.Event',
-        on_delete=models.CASCADE
+        "events.Event",
+        on_delete=models.CASCADE,
     )
 
     # =====================
-    # REGISTRATION INFO
+    # REGISTRATION DETAILS
     # =====================
     registration_number = models.CharField(
         max_length=20,
         unique=True,
-        blank=True
+        blank=True,
     )
 
     registration_type = models.CharField(
         max_length=20,
         choices=REGISTRATION_TYPES,
-        default='individual'
+        default="individual",
     )
 
     category = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=CATEGORY_CHOICES,
-        default='adult'
+        default="adult",
     )
 
     # =====================
-    # FAMILY INFO
+    # FAMILY ATTENDEES
     # =====================
     adults = models.PositiveIntegerField(default=0)
+
     young_generation = models.PositiveIntegerField(default=0)
+
     sunday_school = models.PositiveIntegerField(default=0)
 
     # =====================
-    # FINANCIALS
+    # FINANCIAL DETAILS
     # =====================
     pledge = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        default=0
+        default=0,
     )
 
     registration_fee = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        default=0
+        default=0,
     )
 
     # =====================
-    # META
+    # DATE CREATED
     # =====================
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -105,28 +107,27 @@ class Registration(models.Model):
     # =====================
     def calculate_registration_fee(self):
 
-        ADULT_PRICE = 20
-        YOUNG_PRICE = 10
-        SUNDAY_PRICE = 5
+        adult_price = 20
+        young_generation_price = 10
+        sunday_school_price = 5
 
         if self.registration_type == "individual":
 
             if self.category == "adult":
-                return ADULT_PRICE
+                return adult_price
 
-            elif self.category == "young":
-                return YOUNG_PRICE
+            if self.category == "young_generation":
+                return young_generation_price
 
-            elif self.category == "sunday":
-                return SUNDAY_PRICE
+            if self.category == "sunday_school":
+                return sunday_school_price
 
             return 0
 
-        # Family Registration
         return (
-            (self.adults or 0) * ADULT_PRICE +
-            (self.young_generation or 0) * YOUNG_PRICE +
-            (self.sunday_school or 0) * SUNDAY_PRICE
+            (self.adults or 0) * adult_price
+            + (self.young_generation or 0) * young_generation_price
+            + (self.sunday_school or 0) * sunday_school_price
         )
 
     # =====================
@@ -141,28 +142,30 @@ class Registration(models.Model):
     # =====================
     def save(self, *args, **kwargs):
 
-        # Generate Registration Number
         if not self.registration_number:
 
-            last = Registration.objects.order_by('-id').first()
+            last_registration = Registration.objects.order_by("-id").first()
 
-            if last and last.registration_number:
+            if last_registration and last_registration.registration_number:
                 try:
-                    last_number = int(last.registration_number.split('-')[-1])
-                except ValueError:
+                    last_number = int(
+                        last_registration.registration_number.split("-")[-1]
+                    )
+                except (ValueError, IndexError):
                     last_number = 0
             else:
                 last_number = 0
 
-            self.registration_number = f"AC2026-{last_number + 1:04d}"
+            self.registration_number = (
+                f"AC2026-{last_number + 1:04d}"
+            )
 
-        # Calculate registration fee
         self.registration_fee = self.calculate_registration_fee()
 
         super().save(*args, **kwargs)
 
     # =====================
-    # STRING DISPLAY
+    # DISPLAY
     # =====================
     def __str__(self):
         return f"{self.registration_number} - {self.full_name}"
