@@ -33,7 +33,7 @@ class RegistrationForm(forms.ModelForm):
             "church": "Church",
             "address": "Address",
             "registration_type": "Registration Type",
-            "category": "Individual Category",
+            "category": "Conference Subscription Fees",
             "adults": "Adults",
             "young_generation": "Young Generation",
             "sunday_school": "Sunday School",
